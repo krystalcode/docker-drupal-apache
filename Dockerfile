@@ -41,6 +41,9 @@ RUN apt-get update && \
     # Install the `xdebug` extension used for development/debugging purposes.
     printf "\n" | pecl install xdebug && \
     docker-php-ext-enable xdebug && \
+    # Install the `apcu` extension used by `xautoload` as its cache mode.
+    printf "\n" | pecl install apcu && \
+    docker-php-ext-enable apcu && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
     git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git && \
