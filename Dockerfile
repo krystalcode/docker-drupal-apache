@@ -57,9 +57,10 @@ RUN apt-get update && \
     # 'advagg' module for properly setting headers.
     # Enable 'mod_rewrite' apache module for URL rewriting.
     a2enmod expires headers rewrite && \
-    # Install 'drush-launcher'.
-    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
+    # Install Drush.
+    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/8.2.0/drush.phar
     chmod +x /usr/local/bin/drush && \
+    drush -y init && \
     # Install 'composer'.
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     # Create a user that should own the application files.
