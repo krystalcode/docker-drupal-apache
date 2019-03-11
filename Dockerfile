@@ -60,7 +60,6 @@ RUN apt-get update && \
     # Install 'drush-launcher'.
     curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
     chmod +x /usr/local/bin/drush && \
-    drush -y init && \
     # Install 'composer'.
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     # Create a user that should own the application files.
