@@ -61,7 +61,7 @@ RUN apt-get update && \
     # Enable 'mod_rewrite' apache module for URL rewriting.
     a2enmod expires headers rewrite && \
     # Install Drush.
-    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/8.2.0/drush.phar
+    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/8.2.0/drush.phar && \
     chmod +x /usr/local/bin/drush && \
     drush -y init && \
     # Install 'composer'.
