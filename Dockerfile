@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:5.6-apache
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
@@ -36,14 +36,14 @@ RUN apt-get update && \
     docker-php-ext-enable imagick && \
     # Install the JSMin extension used by the 'advagg' module for faster js
     # minification.
-    printf "\n" | pecl install jsmin && \
+    printf "\n" | pecl install jsmin-2.0.1 && \
     docker-php-ext-enable jsmin && \
     # Install the `xdebug` extension used for development/debugging purposes.
-    printf "\n" | pecl install xdebug && \
+    printf "\n" | pecl install xdebug-2.5.5 && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
-    printf "\n" | pecl install apcu && \
-    docker-php-ext-enable apcu && \
+    printf "\n" | pecl install apc && \
+    docker-php-ext-enable apc && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
     git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git && \
