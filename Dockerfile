@@ -42,7 +42,7 @@ RUN apt-get update && \
     printf "\n" | pecl install xdebug-2.5.5 && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
-    printf "\n" | pecl install apc && \
+    printf "\n" | pecl install apc-4.0.11 && \
     docker-php-ext-enable apc && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
