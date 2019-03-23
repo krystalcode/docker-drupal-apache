@@ -1,5 +1,7 @@
 FROM php:7.2-apache
 
+ENV DRUSH_LAUNCHER_VERSION=0.5.1
+
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
     #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev
@@ -60,10 +62,11 @@ RUN apt-get update && \
     # 'advagg' module for properly setting headers.
     # Enable 'mod_rewrite' apache module for URL rewriting.
     a2enmod expires headers rewrite && \
-    # Install Drush.
-    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/8.2.0/drush.phar && \
+    # Install 'drush-launcher'.
+    curl -L -o \
+      /usr/local/bin/drush \
+      https://github.com/drush-ops/drush-launcher/releases/download/{$DRUSH_LAUNCHER_VERSION}/drush.phar && \
     chmod +x /usr/local/bin/drush && \
-    drush -y init && \
     # Install 'composer'.
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     # Create a user that should own the application files.
@@ -71,3 +74,13 @@ RUN apt-get update && \
     # Export the TERM environment variable.
     # Configure bash shell to use "powerline" by default.
     printf '\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc
+
+# Add apache configuration file.
+# The only change compared to the default file is that it changes the document
+# root to be the /var/www/html/web folder as required by Drupal.
+#
+# @I Include all .htaccess files when the server is starting
+#    type     : improvement
+#    priority : normal
+#    labels   : performance
+COPY apache2.conf /etc/apache2/sites-available/000-default.conf
