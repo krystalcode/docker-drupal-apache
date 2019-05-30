@@ -86,3 +86,6 @@ RUN apt-get update && \
 #    priority : normal
 #    labels   : performance
 COPY apache2.conf /etc/apache2/sites-available/000-default.conf
+
+# Add the bash aliases file.
+COPY .bash_aliases /root/.bash_aliases
