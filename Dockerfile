@@ -4,7 +4,7 @@ FROM php:7.2-apache
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
     #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev
     # Required by composer for installing certain packages: git unzip
-    # Required by Drupal/Drush for communicating with the database: mysql-client
+    # Required by Drupal/Drush for communicating with the database: default-mysql-client
     # Required for text editing: vim
     # Required for better shell experience: powerline fonts-powerline
 RUN apt-get update && \
@@ -17,7 +17,7 @@ RUN apt-get update && \
     libfreetype6-dev \
     git \
     unzip \
-    mysql-client \
+    default-mysql-client \
     vim \
     powerline \
     fonts-powerline && \
