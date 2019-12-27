@@ -71,3 +71,9 @@ RUN apt-get update && \
     # Export the TERM environment variable.
     # Configure bash shell to use "powerline" by default.
     printf '\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc
+
+# Add command for running Composer from anywhere in the filesystem.
+ADD ./commands/c /usr/local/bin/c
+
+# Add command for running Drush from anywhere in the filesystem.
+ADD ./commands/d /usr/local/bin/d

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+APP_ROOT=/var/www/html
+DRUPAL_ROOT=${APP_ROOT}
+CACHE_SCRIPT=${APP_ROOT}/scripts/permissions/cache.sh
+
+# Create a Drush command alias that can be run from anywhere in the filesystem
+# and that resets the file cache folders/files permissions after each Drush
+# command run. We do not do this using a bash alias or function because they
+# wouldn't be available to `docker run` or `docker-compose exec`.
+CURRENT_DIR=$PWD
+cd ${DRUPAL_ROOT}
+drush "$@"
+if [ -f ${CACHE_SCRIPT} ]; then eval ${CACHE_SCRIPT}; fi
+cd $CURRENT_DIR

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Create a Composer command alias that can be run from anywhere in the
+# filesystem and that does not have any memory limits as dependency resolution
+# requires a lot of memory and Composer frequently fails if there is a limit in
+# the memory it can use. We do not do this using a bash alias or function
+# because they wouldn't be available to `docker run` or `docker-compose exec`.
+CURRENT_DIR=$PWD
+cd /var/www/html
+COMPOSER_MEMORY_LIMIT=-1 composer "$@"
+cd $CURRENT_DIR
