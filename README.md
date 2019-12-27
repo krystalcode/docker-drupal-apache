@@ -1,6 +1,6 @@
 *WARNING - This Docker image is designed for development use only*
 
-This is a PHP 7.2 + Apache 2 image based on the official php image. It features
+This is a PHP 7.3 + Apache 2 image based on the official php image. It features
 the following:
 
 Apache modules
