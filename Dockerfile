@@ -77,6 +77,12 @@ RUN apt-get update && \
     # Include bash aliases file.
     printf '\n%s\n%s\n%s\n%s\n\n' '# Include bash aliases file.' 'if [ -f ~/.bash_aliases ]; then' '    . ~/.bash_aliases' 'fi'  >> ~/.bashrc
 
+# Add command for running Composer from anywhere in the filesystem.
+ADD ./commands/c /usr/local/bin/c
+
+# Add command for running Drush from anywhere in the filesystem.
+ADD ./commands/d /usr/local/bin/d
+
 # Add apache configuration file.
 # The only change compared to the default file is that it changes the document
 # root to be the /var/www/html/web folder as required by Drupal.
@@ -86,6 +92,3 @@ RUN apt-get update && \
 #    priority : normal
 #    labels   : performance
 COPY apache2.conf /etc/apache2/sites-available/000-default.conf
-
-# Add the bash aliases file.
-COPY .bash_aliases /root/.bash_aliases
