@@ -2,7 +2,8 @@
 
 APP_ROOT=/var/www/html
 DRUPAL_ROOT=${APP_ROOT}
-CACHE_SCRIPT=${APP_ROOT}/scripts/permissions/cache.sh
+CACHE_SCRIPT_DIR=${APP_ROOT}/scripts/permissions
+CACHE_SCRIPT=cache.sh
 
 # Create a Drush command alias that can be run from anywhere in the filesystem
 # and that resets the file cache folders/files permissions after each Drush
@@ -11,5 +12,7 @@ CACHE_SCRIPT=${APP_ROOT}/scripts/permissions/cache.sh
 CURRENT_DIR=$PWD
 cd ${DRUPAL_ROOT}
 drush "$@"
-if [ -f ${CACHE_SCRIPT} ]; then eval ${CACHE_SCRIPT}; fi
+if [ -f ${CACHE_SCRIPT_DIR}/${CACHE_SCRIPT} ]; then
+    cd ${CACHE_SCRIPT_DIR} && eval ./${CACHE_SCRIPT};
+fi
 cd $CURRENT_DIR
