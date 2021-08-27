@@ -1,6 +1,6 @@
 FROM php:7.4-apache
 
-ENV DRUSH_LAUNCHER_VERSION=0.6.0
+ENV DRUSH_LAUNCHER_VERSION=0.9.1
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
