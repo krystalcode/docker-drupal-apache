@@ -1,4 +1,5 @@
-FROM php:7.3-apache
+FROM docker.io/library/php:7.4-apache
+
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
@@ -24,7 +25,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     # Install php extensions required by Drupal.
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \ && \
     docker-php-ext-install mysqli pdo_mysql mbstring gd curl opcache bcmath && \
     # Install the PhpRedis extension required by the 'redis' module, used for
     # improved cache performance.
