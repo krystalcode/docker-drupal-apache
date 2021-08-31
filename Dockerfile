@@ -1,5 +1,6 @@
 FROM docker.io/library/php:7.4-apache
 
+ENV DRUSH_VERSION=8.4.8
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
@@ -62,7 +63,7 @@ RUN apt-get update && \
     # Enable 'mod_rewrite' apache module for URL rewriting.
     a2enmod expires headers rewrite && \
     # Install Drush.
-    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/8.2.0/drush.phar && \
+    curl -L -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/${DRUSH_VERSION}/drush.phar && \
     chmod +x /usr/local/bin/drush && \
     drush -y init && \
     # Install 'composer'.
