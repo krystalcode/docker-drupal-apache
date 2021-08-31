@@ -17,6 +17,7 @@ RUN apt-get update && \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
+    libonig-dev \
     git \
     unzip \
     default-mysql-client \
