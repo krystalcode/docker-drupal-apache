@@ -1,4 +1,4 @@
-FROM docker.io/library/php:7.4-apache
+FROM docker.io/library/php:8.0-apache
 
 ENV DRUSH_VERSION=8.4.8
 
