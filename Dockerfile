@@ -37,16 +37,23 @@ RUN apt-get update && \
     # toolkit.
     printf "\n" | pecl install imagick && \
     docker-php-ext-enable imagick && \
-    # Install the JSMin extension used by the 'advagg' module for faster js
-    # minification.
-    printf "\n" | pecl install jsmin && \
-    docker-php-ext-enable jsmin && \
     # Install the `xdebug` extension used for development/debugging purposes.
     printf "\n" | pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
     printf "\n" | pecl install apcu && \
     docker-php-ext-enable apcu && \
+    # Install the JSMin extension used by the 'advagg' module for faster js
+    # minification.
+    # We use a fork until there is a PHP 8-compatible release.
+    git clone --recursive --depth=1 -b php81 https://github.com/skilld-labs/pecl-jsmin.git && \
+    cd pecl-jsmin && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install clean && \
+    printf '%s\n' 'extension=jsmin.so'  >> /usr/local/etc/php/conf.d/jsmin.ini && \
+    rm -rf pecl-jsmin && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
     git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git && \
