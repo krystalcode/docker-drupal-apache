@@ -1,4 +1,4 @@
-FROM docker.io/library/php:8.0-apache
+FROM docker.io/library/php:8.1-apache
 
 ENV DRUSH_LAUNCHER_VERSION=0.9.1
 
