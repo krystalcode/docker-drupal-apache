@@ -46,24 +46,24 @@ RUN apt-get update && \
     # Install the JSMin extension used by the 'advagg' module for faster js
     # minification.
     # We use a fork until there is a PHP 8-compatible release.
-    git clone --recursive --depth=1 -b php81 https://github.com/skilld-labs/pecl-jsmin.git && \
-    cd pecl-jsmin && \
+    git clone --recursive --depth=1 -b php81 https://github.com/skilld-labs/pecl-jsmin.git /root/pecl-jsmin && \
+    cd /root/pecl-jsmin && \
     phpize && \
     ./configure && \
     make && \
     make install clean && \
     printf '%s\n' 'extension=jsmin.so'  >> /usr/local/etc/php/conf.d/jsmin.ini && \
-    rm -rf pecl-jsmin && \
+    rm -rf /root/pecl-jsmin && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
-    git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git && \
-    cd php-ext-brotli && \
+    git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git /root/php-ext-brotli && \
+    cd /root/php-ext-brotli && \
     phpize && \
     ./configure && \
     make && \
     make install && \
     printf '%s\n' 'extension=brotli.so'  >> /usr/local/etc/php/conf.d/brotli.ini && \
-    rm -rf php-ext-brotli && \
+    rm -rf /root/php-ext-brotli && \
     # Clean up.
     rm /tmp/pear -rf && \
     # Enable 'mod_expires' and 'mod_headers' apache modules required by the
