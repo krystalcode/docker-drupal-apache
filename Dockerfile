@@ -4,7 +4,7 @@ ENV DRUSH_LAUNCHER_VERSION=0.10.1
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
-    #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev
+    #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev libbrotli-dev
     # Required by composer for installing certain packages: git unzip
     # Required by Drupal/Drush for communicating with the database: default-mysql-client
     # Required for text editing: vim
@@ -18,6 +18,7 @@ RUN apt-get update && \
     libpng-dev \
     libfreetype6-dev \
     libonig-dev \
+    libbrotli-dev \
     git \
     unzip \
     default-mysql-client \
@@ -59,7 +60,7 @@ RUN apt-get update && \
     git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git /root/php-ext-brotli && \
     cd /root/php-ext-brotli && \
     phpize && \
-    ./configure && \
+    ./configure --with-libbrotli && \
     make && \
     make install && \
     printf '%s\n' 'extension=brotli.so'  >> /usr/local/etc/php/conf.d/brotli.ini && \
