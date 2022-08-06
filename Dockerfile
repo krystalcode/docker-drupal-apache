@@ -1,10 +1,11 @@
 FROM docker.io/library/php:8.0-apache
 
 ENV DRUSH_LAUNCHER_VERSION=0.10.1
+ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
-    #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev
+    #   libmagickwand-dev libjpeg-dev libpng-dev libfreetype6-dev libbrotli-dev
     # Required by composer for installing certain packages: git unzip
     # Required by Drupal/Drush for communicating with the database: default-mysql-client
     # Required for text editing: vim
@@ -18,6 +19,7 @@ RUN apt-get update && \
     libpng-dev \
     libfreetype6-dev \
     libonig-dev \
+    libbrotli-dev \
     git \
     unzip \
     default-mysql-client \
@@ -25,7 +27,16 @@ RUN apt-get update && \
     powerline \
     fonts-powerline && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+    # We install PHP extensions on a separate RUN command because we change
+    # directories for building some extensions from source. Changing directory
+    # is carried over within the rest of the commands but it is reset to the
+    # WORKDIR on the next RUN command. This way we avoid accidentally running
+    # commands in the wrong directory - has happened. We will be squashing the
+    # image layers anyway.
+    # Create the directory used for building extensions from source.
+RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     # Install php extensions required by Drupal.
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install mysqli pdo_mysql mbstring gd curl opcache bcmath && \
@@ -46,30 +57,33 @@ RUN apt-get update && \
     # Install the JSMin extension used by the 'advagg' module for faster js
     # minification.
     # We use a fork until there is a PHP 8-compatible release.
+    cd ${PHP_EXTENSION_MAKE_DIR} && \
     git clone --recursive --depth=1 -b php81 https://github.com/skilld-labs/pecl-jsmin.git && \
-    cd pecl-jsmin && \
+    cd ${PHP_EXTENSION_MAKE_DIR}/pecl-jsmin && \
     phpize && \
     ./configure && \
     make && \
     make install clean && \
     printf '%s\n' 'extension=jsmin.so'  >> /usr/local/etc/php/conf.d/jsmin.ini && \
-    rm -rf pecl-jsmin && \
+    rm -rf ${PHP_EXTENSION_MAKE_DIR}/pecl-jsmin && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
+    cd ${PHP_EXTENSION_MAKE_DIR} && \
     git clone --recursive --depth=1 https://github.com/kjdev/php-ext-brotli.git && \
-    cd php-ext-brotli && \
+    cd ${PHP_EXTENSION_MAKE_DIR}/php-ext-brotli && \
     phpize && \
-    ./configure && \
+    ./configure --with-libbrotli && \
     make && \
     make install && \
     printf '%s\n' 'extension=brotli.so'  >> /usr/local/etc/php/conf.d/brotli.ini && \
-    rm -rf php-ext-brotli && \
+    rm -rf ${PHP_EXTENSION_MAKE_DIR}/php-ext-brotli && \
     # Clean up.
-    rm /tmp/pear -rf && \
+    rm /tmp/pear -rf
+
     # Enable 'mod_expires' and 'mod_headers' apache modules required by the
     # 'advagg' module for properly setting headers.
     # Enable 'mod_rewrite' apache module for URL rewriting.
-    a2enmod expires headers rewrite && \
+RUN a2enmod expires headers rewrite && \
     # Install 'drush-launcher'.
     curl -L -o \
       /usr/local/bin/drush \
