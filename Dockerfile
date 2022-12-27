@@ -42,7 +42,7 @@ RUN apt-get update && \
     printf "\n" | pecl install jsmin && \
     docker-php-ext-enable jsmin && \
     # Install the `xdebug` extension used for development/debugging purposes.
-    printf "\n" | pecl install xdebug && \
+    printf "\n" | pecl install xdebug-3.1.6 && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
     printf "\n" | pecl install apcu && \
