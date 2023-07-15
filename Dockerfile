@@ -1,6 +1,6 @@
 FROM docker.io/library/php:8.0-apache
 
-ENV DRUSH_VERSION=8.4.8
+ENV DRUSH_VERSION=8.4.12
 
     # Install OS packages required.
     # Required by php extensions: libcurl4-gnutls-dev imagemagick
