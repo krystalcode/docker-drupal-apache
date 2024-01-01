@@ -1,6 +1,5 @@
 FROM docker.io/library/php:8.0-apache
 
-ENV DRUSH_LAUNCHER_VERSION=0.10.1
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
 
     # Install OS packages required.
@@ -84,18 +83,14 @@ RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     # 'advagg' module for properly setting headers.
     # Enable 'mod_rewrite' apache module for URL rewriting.
 RUN a2enmod expires headers rewrite && \
-    # Install 'drush-launcher'.
-    curl -L -o \
-      /usr/local/bin/drush \
-      https://github.com/drush-ops/drush-launcher/releases/download/{$DRUSH_LAUNCHER_VERSION}/drush.phar && \
-    chmod +x /usr/local/bin/drush && \
     # Install 'composer'.
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     # Create a user that should own the application files.
     groupadd -r application && useradd -r -g application application && \
     # Export the TERM environment variable.
+    # Add Composer `bin` folder to the path.
     # Configure bash shell to use "powerline" by default.
-    printf '\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
+    printf '\n%s\n%s\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Add Composer `bin` folder to the path' 'export PATH="/var/www/html/bin:$PATH"' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
     # Include bash aliases file.
     printf '\n%s\n%s\n%s\n%s\n\n' '# Include bash aliases file.' 'if [ -f ~/.bash_aliases ]; then' '    . ~/.bash_aliases' 'fi'  >> ~/.bashrc
 
