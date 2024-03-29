@@ -45,8 +45,16 @@ RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     docker-php-ext-enable redis && \
     # Install the Imagick extension used by the 'imagick' module as the image
     # toolkit.
-    printf "\n" | pecl install imagick && \
-    docker-php-ext-enable imagick && \
+    # We use a branch until there is a PHP 8-compatible release.
+    cd ${PHP_EXTENSION_MAKE_DIR} && \
+    git clone --recursive --depth=1 -b master https://github.com/Imagick/imagick.git && \
+    cd ${PHP_EXTENSION_MAKE_DIR}/imagick && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install clean && \
+    printf '%s\n' 'extension=imagick.so'  >> /usr/local/etc/php/conf.d/imagick.ini && \
+    rm -rf ${PHP_EXTENSION_MAKE_DIR}/imagick && \
     # Install the `xdebug` extension used for development/debugging purposes.
     printf "\n" | pecl install xdebug-3.2.2 && \
     docker-php-ext-enable xdebug && \
