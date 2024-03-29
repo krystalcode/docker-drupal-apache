@@ -11,6 +11,12 @@ CACHE_SCRIPT=cache.sh
 # wouldn't be available to `docker run` or `docker-compose exec`.
 CURRENT_DIR=$PWD
 cd ${DRUPAL_ROOT}
+
+if ! command -v drush &> /dev/null
+then
+    export PATH=$PATH:/var/www/html/bin
+fi
+
 drush "$@"
 if [ -f ${CACHE_SCRIPT_DIR}/${CACHE_SCRIPT} ]; then
     cd ${CACHE_SCRIPT_DIR} && eval ./${CACHE_SCRIPT};
