@@ -88,7 +88,7 @@ RUN a2enmod expires headers rewrite && \
     # Create a user that should own the application files.
     groupadd -r application && useradd -r -g application application && \
     # Export the TERM environment variable.
-    # Add Composer `bin` folder to the path.
+    # Add the Composer `bin` folder to the path.
     # Configure bash shell to use "powerline" by default.
     printf '\n%s\n%s\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Add Composer `bin` folder to the path' 'export PATH="/var/www/html/bin:$PATH"' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
     # Include bash aliases file.
