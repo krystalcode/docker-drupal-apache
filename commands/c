@@ -7,5 +7,5 @@
 # because they wouldn't be available to `docker run` or `docker-compose exec`.
 CURRENT_DIR=$PWD
 cd /var/www/html
-COMPOSER_MEMORY_LIMIT=-1 composer "$@"
+COMPOSER_MEMORY_LIMIT=-1 COMPOSER_ALLOW_SUPERUSER=1 composer "$@"
 cd $CURRENT_DIR
