@@ -56,7 +56,7 @@ RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     printf '%s\n' 'extension=imagick.so'  >> /usr/local/etc/php/conf.d/imagick.ini && \
     rm -rf ${PHP_EXTENSION_MAKE_DIR}/imagick && \
     # Install the `xdebug` extension used for development/debugging purposes.
-    printf "\n" | pecl install xdebug && \
+    printf "\n" | pecl install xdebug-3.2.2 && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
     printf "\n" | pecl install apcu && \
