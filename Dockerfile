@@ -98,7 +98,7 @@ RUN a2enmod expires headers rewrite && \
     # Export the TERM environment variable.
     # Add the Composer `bin` folder to the path.
     # Configure bash shell to use "powerline" by default.
-    printf '\n%s\n%s\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Add Composer `bin` folder to the path' 'export PATH="/var/www/html/bin:$PATH"' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
+    printf '\n%s\n%s\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Add Composer `bin` folder to the path' 'export PATH="/var/www/html/bin:/var/www/html/vendor/bin:$PATH"' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
     # Include bash aliases file.
     printf '\n%s\n%s\n%s\n%s\n\n' '# Include bash aliases file.' 'if [ -f ~/.bash_aliases ]; then' '    . ~/.bash_aliases' 'fi'  >> ~/.bashrc
 
