@@ -14,7 +14,7 @@ cd ${DRUPAL_ROOT}
 
 if ! command -v drush &> /dev/null
 then
-    export PATH=$PATH:/var/www/html/bin
+    export PATH=$PATH:/var/www/html/bin:/var/www/html/vendor/bin
 fi
 
 drush "$@"
