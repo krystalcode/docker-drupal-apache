@@ -108,6 +108,9 @@ ADD ./commands/c /usr/local/bin/c
 # Add command for running Drush from anywhere in the filesystem.
 ADD ./commands/d /usr/local/bin/d
 
+# Add command for running another command multiple times.
+ADD ./commands/r /usr/local/bin/r
+
 # Add apache configuration file.
 # The only change compared to the default file is that it changes the document
 # root to be the /var/www/html/web folder as required by Drupal.
