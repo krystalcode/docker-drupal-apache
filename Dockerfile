@@ -112,3 +112,9 @@ ADD ./commands/r /usr/local/bin/r
 #    priority : normal
 #    labels   : performance
 COPY apache2.conf /etc/apache2/sites-available/000-default.conf
+
+# PHP configuration.
+ADD podman/php-application-develop.ini /usr/local/etc/php/conf.d/application-develop.ini
+ADD podman/php-application-execution.ini /usr/local/etc/php/conf.d/application-execution.ini
+ADD podman/php-application-uploads.ini /usr/local/etc/php/conf.d/application-uploads.ini
+ADD podman/php-application-errors.ini /usr/local/etc/php/conf.d/application-errors.ini
