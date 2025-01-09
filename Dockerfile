@@ -114,7 +114,7 @@ ADD ./commands/r /usr/local/bin/r
 COPY apache2.conf /etc/apache2/sites-available/000-default.conf
 
 # PHP configuration.
-ADD podman/php-application-errors.ini /usr/local/etc/php/conf.d/application-errors.ini
-ADD podman/php-application-execution.ini /usr/local/etc/php/conf.d/application-execution.ini
-ADD podman/php-application-uploads.ini /usr/local/etc/php/conf.d/application-uploads.ini
-ADD podman/php-application-xdebug.ini /usr/local/etc/php/conf.d/application-xdebug.ini
+ADD php-application-errors.ini /usr/local/etc/php/conf.d/application-errors.ini
+ADD php-application-execution.ini /usr/local/etc/php/conf.d/application-execution.ini
+ADD php-application-uploads.ini /usr/local/etc/php/conf.d/application-uploads.ini
+ADD php-application-xdebug.ini /usr/local/etc/php/conf.d/application-xdebug.ini
