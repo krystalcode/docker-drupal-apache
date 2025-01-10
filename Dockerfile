@@ -1,4 +1,4 @@
-FROM docker.io/library/php:8.3-apache
+FROM docker.io/library/php:8.4-apache
 
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
 
