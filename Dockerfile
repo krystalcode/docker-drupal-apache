@@ -1,5 +1,7 @@
 FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
 
+FROM docker.io/krystalcode/d_atuin:12-latest as atuin
+
 FROM docker.io/library/php:8.0-apache
 
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
@@ -98,6 +100,13 @@ RUN a2enmod expires headers rewrite && \
     # Include bash aliases file.
     printf '\n%s\n%s\n%s\n%s\n\n' '# Include bash aliases file.' 'if [ -f ~/.bash_aliases ]; then' '    . ~/.bash_aliases' 'fi'  >> ~/.bashrc
 
+# Allow extending .bashrc with files.
+# Unless we copy the file first, it is not found.
+COPY .bashrc.extend.sh /tmp/.bashrc.extend.sh
+RUN cat /tmp/.bashrc.extend.sh >> ~/.bashrc && \
+    rm /tmp/.bashrc.extend.sh && \
+    mkdir ~/.bashrc.d
+
 # Add command for running Composer from anywhere in the filesystem.
 ADD ./commands/c /usr/local/bin/c
 
@@ -129,3 +138,7 @@ COPY --from=ble.sh /root/.local/share/doc/blesh /root/.local/share/doc/blesh
 
 RUN sed -i '1s/^/[[ $- == *i* ]] \&\& source ~\/.local\/share\/blesh\/ble\.sh --noattach\n\n/' ~/.bashrc && \
     echo '[[ ! ${BLE_VERSION-} ]] || ble-attach' >> ~/.bashrc
+
+# Atuin.
+COPY --from=atuin /usr/bin/atuin /usr/bin/
+COPY --from=atuin /root/.bashrc.d/atuin-client.sh /root/.bashrc.d/
