@@ -1,3 +1,5 @@
+FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
+
 FROM docker.io/library/php:8.0-apache
 
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
@@ -9,6 +11,7 @@ ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
     # Required by Drupal/Drush for communicating with the database: default-mysql-client
     # Required for text editing: vim
     # Required for better shell experience: powerline fonts-powerline
+    # Required for `ble.sh`: gawk
 RUN apt-get update && \
     apt-get -y install \
     libcurl4-gnutls-dev \
@@ -24,7 +27,8 @@ RUN apt-get update && \
     default-mysql-client \
     vim \
     powerline \
-    fonts-powerline && \
+    fonts-powerline \
+    gawk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -118,3 +122,10 @@ ADD php-application-errors.ini /usr/local/etc/php/conf.d/application-errors.ini
 ADD php-application-execution.ini /usr/local/etc/php/conf.d/application-execution.ini
 ADD php-application-uploads.ini /usr/local/etc/php/conf.d/application-uploads.ini
 ADD php-application-xdebug.ini /usr/local/etc/php/conf.d/application-xdebug.ini
+
+# `ble.sh`.
+COPY --from=ble.sh /root/.local/share/blesh /root/.local/share/blesh
+COPY --from=ble.sh /root/.local/share/doc/blesh /root/.local/share/doc/blesh
+
+RUN sed -i '1s/^/[[ $- == *i* ]] \&\& source ~\/.local\/share\/blesh\/ble\.sh --noattach\n\n/' ~/.bashrc && \
+    echo '[[ ! ${BLE_VERSION-} ]] || ble-attach' >> ~/.bashrc
