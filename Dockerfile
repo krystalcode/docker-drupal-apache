@@ -2,6 +2,8 @@ FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
 
 FROM docker.io/krystalcode/d_atuin:12-latest as atuin
 
+FROM docker.io/krystalcode/d_just:12-latest as just
+
 FROM docker.io/library/php:8.0-apache
 
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
@@ -142,3 +144,6 @@ RUN sed -i '1s/^/[[ $- == *i* ]] \&\& source ~\/.local\/share\/blesh\/ble\.sh --
 # Atuin.
 COPY --from=atuin /usr/bin/atuin /usr/bin/
 COPY --from=atuin /root/.bashrc.d/atuin-client.sh /root/.bashrc.d/
+
+# Just.
+COPY --from=just /usr/bin/just /usr/bin/
