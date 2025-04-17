@@ -147,3 +147,4 @@ COPY --from=atuin /root/.bashrc.d/atuin-client.sh /root/.bashrc.d/
 
 # Just.
 COPY --from=just /usr/bin/just /usr/bin/
+ADD ./commands/r /usr/local/bin/j

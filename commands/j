@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Create a Just command alias that can be run from anywhere in the filesystem.
+CURRENT_DIR=$PWD
+cd /var/www/html
+/usr/bin/just "$@"
+cd $CURRENT_DIR
