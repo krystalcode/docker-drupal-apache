@@ -6,7 +6,6 @@ FROM docker.io/krystalcode/d_just:12-latest as just
 
 FROM docker.io/library/php:8.3-apache
 
-
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
 
     # Install OS packages required.
