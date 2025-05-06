@@ -1,8 +1,8 @@
-FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
+FROM docker.io/krystalcode/d_ble_sh:11-latest as ble.sh
 
-FROM docker.io/krystalcode/d_atuin:12-latest as atuin
+FROM docker.io/krystalcode/d_atuin:11-latest as atuin
 
-FROM docker.io/krystalcode/d_just:12-latest as just
+FROM docker.io/krystalcode/d_just:11-latest as just
 
 FROM docker.io/library/php:8.0-apache
 
