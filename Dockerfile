@@ -1,3 +1,5 @@
+FROM docker.io/krystalcode/d_debian:12 as debian
+
 FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
 
 FROM docker.io/krystalcode/d_atuin:12-latest as atuin
@@ -14,7 +16,6 @@ ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
     # Required by composer for installing certain packages: git unzip
     # Required by Drupal/Drush for communicating with the database: default-mysql-client
     # Required for text editing: vim
-    # Required for better shell experience: powerline fonts-powerline
     # Required for `ble.sh`: gawk
 RUN apt-get update && \
     apt-get -y install \
@@ -30,8 +31,6 @@ RUN apt-get update && \
     unzip \
     default-mysql-client \
     vim \
-    powerline \
-    fonts-powerline \
     gawk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -94,20 +93,7 @@ RUN a2enmod expires headers rewrite && \
     # Install 'composer'.
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
     # Create a user that should own the application files.
-    groupadd -r application && useradd -r -g application application && \
-    # Export the TERM environment variable.
-    # Add the Composer `bin` folder to the path.
-    # Configure bash shell to use "powerline" by default.
-    printf '\n%s\n%s\n%s\n%s\n\n\n%s\n%s\n%s\n%s\n%s\n\n' '# Export TERM environment variable' 'export TERM=xterm' '# Add Composer `bin` folder to the path' 'export PATH="/var/www/html/bin:/var/www/html/vendor/bin:$PATH"' '# Use powerline' 'powerline-daemon -q' 'POWERLINE_BASH_CONTINUATION=1' 'POWERLINE_BASH_SELECT=1' '. /usr/share/powerline/bindings/bash/powerline.sh'  >> ~/.bashrc && \
-    # Include bash aliases file.
-    printf '\n%s\n%s\n%s\n%s\n\n' '# Include bash aliases file.' 'if [ -f ~/.bash_aliases ]; then' '    . ~/.bash_aliases' 'fi'  >> ~/.bashrc
-
-# Allow extending .bashrc with files.
-# Unless we copy the file first, it is not found.
-COPY .bashrc.extend.sh /tmp/.bashrc.extend.sh
-RUN cat /tmp/.bashrc.extend.sh >> ~/.bashrc && \
-    rm /tmp/.bashrc.extend.sh && \
-    mkdir ~/.bashrc.d
+    groupadd -r application && useradd -r -g application application
 
 # Add command for running Composer from anywhere in the filesystem.
 ADD ./commands/c /usr/local/bin/c
@@ -134,12 +120,25 @@ ADD php-application-execution.ini /usr/local/etc/php/conf.d/application-executio
 ADD php-application-uploads.ini /usr/local/etc/php/conf.d/application-uploads.ini
 ADD php-application-xdebug.ini /usr/local/etc/php/conf.d/application-xdebug.ini
 
+# Bash extensions.
+COPY --from=debian /root/.bashrc /root/
+COPY --from=debian /root/.bashrc.d /root/.bashrc.d
+COPY .bashrc.d/composer.sh /root/.bashrc.d/
+
+# `dotenv`.
+COPY --from=debian /usr/bin/dotenv /usr/bin/dotenv
+
 # `ble.sh`.
 COPY --from=ble.sh /root/.local/share/blesh /root/.local/share/blesh
 COPY --from=ble.sh /root/.local/share/doc/blesh /root/.local/share/doc/blesh
 
 RUN sed -i '1s/^/[[ $- == *i* ]] \&\& source ~\/.local\/share\/blesh\/ble\.sh --noattach\n\n/' ~/.bashrc && \
     echo '[[ ! ${BLE_VERSION-} ]] || ble-attach' >> ~/.bashrc
+
+# Oh My Posh.
+# The Bash extension is copied in the "Bash extensions" section above.
+COPY --from=debian /usr/bin/oh-my-posh /usr/bin/
+COPY --from=debian /root/.config/oh-my-posh/themes/runnah.minimal.omp.json /root/.config/oh-my-posh/themes/runnah.minimal.omp.json
 
 # Atuin.
 COPY --from=atuin /usr/bin/atuin /usr/bin/
