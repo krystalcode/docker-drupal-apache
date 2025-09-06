@@ -1,12 +1,15 @@
-FROM docker.io/krystalcode/d_debian:12 as debian
+ARG DEBIAN_VERSION="13"
+ARG PHP_VERSION="8.4"
 
-FROM docker.io/krystalcode/d_ble_sh:12-latest as ble.sh
+FROM docker.io/krystalcode/d_debian:{DEBIAN_VERSION} as debian
 
-FROM docker.io/krystalcode/d_atuin:12-latest as atuin
+FROM docker.io/krystalcode/d_ble_sh:{DEBIAN_VERSION}-latest as ble.sh
 
-FROM docker.io/krystalcode/d_just:12-latest as just
+FROM docker.io/krystalcode/d_atuin:{DEBIAN_VERSION}-latest as atuin
 
-FROM docker.io/library/php:8.2-apache
+FROM docker.io/krystalcode/d_just:{DEBIAN_VERSION}-latest as just
+
+FROM docker.io/library/php:${PHP_VERSION}-apache
 
 ENV PHP_EXTENSION_MAKE_DIR=/tmp/php-make
 
@@ -100,6 +103,9 @@ ADD ./commands/c /usr/local/bin/c
 
 # Add command for running Drush from anywhere in the filesystem.
 ADD ./commands/d /usr/local/bin/d
+
+# Add command for resetting file permissions.
+ADD ./commands/p /usr/local/bin/p
 
 # Add command for running another command multiple times.
 ADD ./commands/r /usr/local/bin/r
