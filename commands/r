@@ -1,25 +1,43 @@
 #!/bin/bash
 #
 # Makes it easy to run a command multiple times.
-# Run a queue 3 times: r 3 d queue:run my_queue
+# Run a queue 3 times:
+# - r 3 0 d queue:run my_queue
+# Run a queue 3 times, pausing for 1 second between each repetition:
+# - r 3 1 d queue:run my_queue
+# Run a queue indefinitely, pausing for 1 second between each repetition:
+# - r -1 1 d queue:run my_queue
 
 times=$1
-
 regex='^[0-9]+$'
-if ! [[ $times =~ $regex ]] ; then
-    echo "Please provide the number of times to repeat the command"
+if ! ([[ "${times}" =~ $regex ]] || [[ "${times}" == -1 ]]); then
+    echo "Please provide the number of times to repeat the command; -1 to repeat indefinitely"
     exit 1
 fi
 
-shift
-
-if [ -z "$@" ]
-then
-    echo "Please provide the command to execute"
+sleep=$2
+regex='^[0-9]+$'
+if ! [[ "${sleep}" =~ ${regex} ]] ; then
+    printf "[ERROR] Please provide the number of seconds to pause between each command repetition\n"
     exit 2
 fi
 
-for (( i = 0; i < $times; i++ ))
-do
-    "$@"
-done
+shift
+shift
+
+if [ "$#" -eq 0 ]; then
+    printf "[ERROR] Please provide the command to execute\n"
+    exit 3
+fi
+
+if [[ "${times}" == -1 ]]; then
+    while true; do
+        "$@"
+        sleep "${sleep}"
+    done
+else
+    for (( i = 0; i < $times; i++ )); do
+        "$@"
+        sleep "${sleep}"
+    done
+fi
