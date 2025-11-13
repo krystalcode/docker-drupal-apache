@@ -11,7 +11,7 @@
 times=$1
 regex='^[0-9]+$'
 if ! ([[ "${times}" =~ $regex ]] || [[ "${times}" == -1 ]]); then
-    echo "Please provide the number of times to repeat the command; -1 to repeat indefinitely"
+    printf "[ERROR] provide the number of times to repeat the command; -1 to repeat indefinitely\n"
     exit 1
 fi
 
