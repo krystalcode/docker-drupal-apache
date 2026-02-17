@@ -1,5 +1,5 @@
 ARG DEBIAN_VERSION="11"
-ARG PHP_VERSION="7.4"
+ARG PHP_VERSION="7.3"
 
 FROM docker.io/krystalcode/d_debian:${DEBIAN_VERSION} as debian
 
@@ -47,11 +47,11 @@ RUN apt-get update && \
     # Create the directory used for building extensions from source.
 RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     # Install php extensions required by Drupal.
-    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-install mysqli pdo_mysql mbstring gd curl opcache bcmath && \
     # Install the PhpRedis extension required by the 'redis' module, used for
     # improved cache performance.
-    printf "\n" | pecl install redis && \
+    printf "\n" | pecl install redis-5.3.7 && \
     docker-php-ext-enable redis && \
     # Install the Imagick extension used by the 'imagick' module as the image
     # toolkit.
