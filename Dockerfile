@@ -1,5 +1,5 @@
-ARG DEBIAN_VERSION="13"
-ARG PHP_VERSION="8.4"
+ARG DEBIAN_VERSION="11"
+ARG PHP_VERSION="7.4"
 
 FROM docker.io/krystalcode/d_debian:${DEBIAN_VERSION} as debian
 
@@ -57,24 +57,16 @@ RUN mkdir ${PHP_EXTENSION_MAKE_DIR} && \
     # toolkit.
     printf "\n" | pecl install imagick && \
     docker-php-ext-enable imagick && \
+    # Install the JSMin extension used by the 'advagg' module for faster js
+    # minification.
+    printf "\n" | pecl install jsmin && \
+    docker-php-ext-enable jsmin && \
     # Install the `xdebug` extension used for development/debugging purposes.
-    printf "\n" | pecl install xdebug-3.2.2 && \
+    printf "\n" | pecl install xdebug-3.1.6 && \
     docker-php-ext-enable xdebug && \
     # Install the `apcu` extension used by `xautoload` as its cache mode.
     printf "\n" | pecl install apcu && \
     docker-php-ext-enable apcu && \
-    # Install the JSMin extension used by the 'advagg' module for faster js
-    # minification.
-    # We use a fork until there is a PHP 8-compatible release.
-    cd ${PHP_EXTENSION_MAKE_DIR} && \
-    git clone --recursive --depth=1 -b php81 https://github.com/skilld-labs/pecl-jsmin.git && \
-    cd ${PHP_EXTENSION_MAKE_DIR}/pecl-jsmin && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install clean && \
-    printf '%s\n' 'extension=jsmin.so'  >> /usr/local/etc/php/conf.d/jsmin.ini && \
-    rm -rf ${PHP_EXTENSION_MAKE_DIR}/pecl-jsmin && \
     # Install the `brotli` extension used by the `advagg` module for CSS/JS
     # compression.
     cd ${PHP_EXTENSION_MAKE_DIR} && \
